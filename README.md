@@ -1,4 +1,4 @@
-﻿# Fingerprint Attendance System
+# Fingerprint Attendance System
 
 A complete **biometric attendance system** combining an **AS608 fingerprint sensor**, **PIC16F877A**, **Arduino Mega 2560**, **3.5-inch TFT**, **DS3231 RTC**, **SD-card logging**, LEDs, buzzer, and physical controls.
 
@@ -66,14 +66,14 @@ Also verify VDD pins 11/32, VSS pins 12/31, the required crystal, and a common g
 
 ```text
 fingerprint-attendance-system/
-â”œâ”€â”€ firmware/
-â”‚   â”œâ”€â”€ variant-a-as608-via-pic/
-â”‚   â””â”€â”€ variant-b-as608-direct-mega/
-â”œâ”€â”€ hardware/
-â”œâ”€â”€ diagnostics/
-â”œâ”€â”€ assets/ui/
-â”œâ”€â”€ tools/
-â””â”€â”€ examples/
+|-- firmware/
+|   |-- variant-a-as608-via-pic/
+|   \-- variant-b-as608-direct-mega/
+|-- hardware/
+|-- diagnostics/
+|-- assets/ui/
+|-- tools/
+\-- examples/
 ```
 
 ## Privacy
