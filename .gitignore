@@ -1,0 +1,29 @@
+# MPLAB X / XC8 generated files
+build/
+dist/
+nbproject/private/
+*.d
+*.o
+*.p1
+*.elf
+*.hex
+*.map
+
+# Arduino / editor temporary files
+*.tmp
+*.bak
+*.autosave
+.vscode/
+
+# Python
+__pycache__/
+*.pyc
+
+# Attendance/private runtime data
+ATTEND.CSV
+attendance_exports/
+ATTEND_*.csv
+
+# OS files
+Thumbs.db
+.DS_Store

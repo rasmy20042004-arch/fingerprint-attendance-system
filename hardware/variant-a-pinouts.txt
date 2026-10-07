@@ -1,0 +1,166 @@
+FINGERPRINT ATTENDANCE SYSTEM - FINAL PINOUTS
+================================================
+
+FINAL ARCHITECTURE
+------------------
+MAIN / HARDWARE UART = PIC <-> ARDUINO MEGA
+FINGERPRINT / SOFTWARE UART = PIC <-> AS608
+
+IMPORTANT
+---------
+Your AS608 is currently 57600 baud.
+Before using the FINAL wiring/code, run:
+    AS608_Baud_57600_to_9600_ONE_TIME.c
+with the OLD working AS608 wiring on RC6/RC7.
+Only after "BAUD_CHANGE_OK", power-cycle and use the FINAL wiring below.
+
+================================================
+1) PIC16F877A <-> ARDUINO MEGA 2560
+================================================
+
+PIC RC6 / physical pin 25 / TX  ---> Mega pin 17 / RX2
+PIC RC7 / physical pin 26 / RX  <--- Mega pin 16 / TX2
+PIC GND                           --- Mega GND
+
+Baud: 2400, 8N1
+PIC side: HARDWARE UART
+Mega side: Serial2
+
+Mega USB Serial Monitor: 115200 baud
+
+================================================
+2) AS608 <-> PIC16F877A - FINAL
+================================================
+
+PIC RD3 / physical pin 22 / software TX ---> AS608 RX
+PIC RD2 / physical pin 21 / software RX <--- AS608 TX
+PIC GND                                  --- AS608 GND
+
+AS608 baud: 9600, 8N1
+PIC side: SOFTWARE UART
+
+AS608 VCC:
+Use the same module-rated supply that worked with your sensor board.
+Do not change the supply voltage just because the UART pins were swapped.
+
+================================================
+3) DS3231 RTC <-> PIC16F877A
+================================================
+
+PIC RC3 / physical pin 18 ---> DS3231 SCL
+PIC RC4 / physical pin 23 <-> DS3231 SDA
+PIC GND                     --- DS3231 GND
++5 V                        --- DS3231 VCC
+
+================================================
+4) PHYSICAL SWITCHES -> PIC16F877A
+================================================
+
+RB0 / physical pin 33 -> ADD
+RB1 / physical pin 34 -> OK / DELETE
+RB2 / physical pin 35 -> UP
+RB3 / physical pin 36 -> DOWN
+
+Switches are ACTIVE LOW.
+Use external 10k pull-ups to +5 V as in your schematic.
+Other side of each switch -> GND.
+
+================================================
+5) OUTPUTS FROM PIC16F877A
+================================================
+
+RD0 / physical pin 19 -> 220 ohm -> WHITE LED -> GND
+RD1 / physical pin 20 -> 220 ohm -> RED LED   -> GND
+RC2 / physical pin 17 -> ACTIVE BUZZER
+
+================================================
+6) PIC POWER / CLOCK
+================================================
+
+PIC VDD pin 11 -> +5 V
+PIC VDD pin 32 -> +5 V
+
+PIC VSS pin 12 -> GND
+PIC VSS pin 31 -> GND
+
+MCLR pin 1 -> +5 V through about 10k
+
+10 MHz crystal:
+pin 13 <-> crystal <-> pin 14
+Use your existing working oscillator capacitors/layout.
+
+ALL GROUNDS MUST BE COMMON.
+
+================================================
+7) ARDUINO MEGA TFT / TOUCH / SD
+================================================
+
+TFT: 3.5 inch MCUFRIEND_kbv shield/display
+Rotation: landscape
+
+Resistive touch mapping used by code:
+XP = Mega D7
+XM = Mega A1
+YP = Mega A2
+YM = Mega D6
+
+Touch calibration is stored in EEPROM.
+Serial Monitor command:
+    RECAL_TOUCH
+
+SD SoftSPI:
+CS   = Mega D10
+MOSI = Mega D11
+MISO = Mega D12
+SCK  = Mega D13
+
+Attendance CSV:
+    ATTEND.CSV
+
+================================================
+8) FINAL SOFTWARE
+================================================
+
+PIC:
+PIC16F877A_FINAL_HardwareArduino_SoftwareFingerprint.c
+
+Arduino Mega:
+Mega2560_FINAL_Attendance.ino
+
+One-time migration only:
+AS608_Baud_57600_to_9600_ONE_TIME.c
+
+Required Arduino libraries:
+- MCUFRIEND_kbv
+- Adafruit_GFX
+- TouchScreen
+- EEPROM
+- SdFat
+
+================================================
+9) EXPECTED STARTUP
+================================================
+
+Serial Monitor at 115200 should show Mega startup and then PIC messages such as:
+
+PIC ONLINE
+AS608 ONLINE THROUGH PIC
+TIME,YYYY-MM-DD,HH:MM:SS
+
+Type:
+    PIC_STATUS
+
+Expected:
+    PIC STATUS: CONNECTED
+
+================================================
+10) DO NOT CHANGE THESE FINAL UART SETTINGS
+================================================
+
+PIC <-> Mega:
+    Hardware UART RC6/RC7
+    2400 baud
+
+PIC <-> AS608:
+    Software UART RD3/RD2
+    9600 baud
